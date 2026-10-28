@@ -1,0 +1,64 @@
+<p-toast></p-toast>
+
+<div class="container">
+  <p-card header="Polyglot – Traduttore PDF" subheader="Mantieni stile, font e layout">
+    <div class="grid">
+      <div class="col-12 md:col-6">
+        <label>Lingua origine</label>
+        <p-dropdown [options]="languages" [(ngModel)]="sourceLang" optionLabel="label" optionValue="value"
+                    placeholder="Seleziona" class="w-full"></p-dropdown>
+      </div>
+      <div class="col-12 md:col-6">
+        <label>Lingua destinazione</label>
+        <p-dropdown [options]="languages.slice(1)" [(ngModel)]="targetLang" optionLabel="label" optionValue="value"
+                    placeholder="Seleziona" class="w-full"></p-dropdown>
+      </div>
+    </div>
+
+    <div class="mt-3">
+      <p-checkbox [(ngModel)]="skipCode" [binary]="true" label="Preserva blocchi di codice"></p-checkbox>
+    </div>
+
+    <div class="mt-4">
+      <p-fileUpload mode="basic" name="file" accept=".pdf" maxFileSize="50000000"
+                    (onSelect)="onFileSelect($event)" chooseLabel="Scegli PDF"
+                    [auto]="false" [showUploadButton]="false"></p-fileUpload>
+      <small *ngIf="selectedFile">Selezionato: {{ selectedFile.name }}</small>
+    </div>
+
+    <div class="mt-4">
+      <p-button label="Traduci" icon="pi pi-language" (onClick)="translate()"
+                [loading]="uploading" [disabled]="!selectedFile" class="w-full"></p-button>
+    </div>
+
+    <p-progressBar *ngIf="uploading" [value]="progress" class="mt-3"></p-progressBar>
+  </p-card>
+
+  <p-card header="Cronologia traduzioni" class="mt-4" *ngIf="history.length">
+    <p-button label="Pulisci cronologia" icon="pi pi-trash" severity="secondary"
+              (onClick)="clearHistory()" class="mb-3"></p-button>
+
+    <p-table [value]="history" [tableStyle]="{ 'min-width': '40rem' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>File</th>
+          <th>Lingua</th>
+          <th>Data</th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-entry>
+        <tr>
+          <td>{{ entry.filename }}</td>
+          <td>{{ entry.targetLang }}</td>
+          <td>{{ entry.date }}</td>
+          <td>
+            <p-button icon="pi pi-download" [rounded]="true" [text]="true"
+                      (onClick)="download(entry)" [disabled]="!entry.blobUrl"
+                      pTooltip="Disponibile solo in questa sessione"></p-button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>

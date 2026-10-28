@@ -1,22 +1,33 @@
 # Polyglot
 
-Traduttore PDF che cerca di preservare layout, dimensioni font, stili (grassetto/corsivo) e blocchi di codice.
+Traduttore PDF con interfaccia Angular + PrimeNG e backend FastAPI.
+
+## Struttura
+- `frontend/` — App Angular + PrimeNG
+- `backend/` — API FastAPI (PyMuPDF + Google Translate)
 
 ## Avvio locale
 
+### Backend
 ```bash
+cd backend
 pip install -r requirements.txt
-streamlit run app.py
+uvicorn main:app --reload --port 8000
 ```
 
-## Deploy gratuito (consigliato)
+### Frontend
+```bash
+cd frontend
+npm install
+ng serve
+```
 
-1. Vai su [share.streamlit.io](https://share.streamlit.io)
-2. Collega questo repository GitHub
-3. Main file path: `app.py`
-4. Deploy
+Apri http://localhost:4200
 
-## Limitazioni
+**Nota**: in `src/app/app.component.ts` cambia `apiUrl` con l’URL del backend deployato.
 
-La riproduzione **esatta** di font proprietari e layout ultra-complessi non è sempre possibile.  
-Le traduzioni cambiano lunghezza. Per documenti scientifici con formule si consiglia anche PDFMathTranslate (`pdf2zh`).
+## Deploy
+- Frontend → Netlify / Vercel
+- Backend → Render / Railway / Fly.io
+
+La cronologia delle traduzioni è salvata in `localStorage` del browser.
